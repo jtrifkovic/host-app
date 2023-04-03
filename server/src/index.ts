@@ -15,11 +15,15 @@ app.use(cors())
 app.use(express.json())
 
 app.get("/decks",  async (req: Request, res: Response) => {
-    //TODO: fetch all decks and send back to the user
-    // 1. how do we fetch the decks from mongo?
     const decks = await Deck.find()
     console.log(decks)
-    // 2. how do we send back the array to the ui?
+    res.json(decks)
+
+})
+
+app.get("/decks",  async (req: Request, res: Response) => {
+    const decks = await Deck.find()
+    console.log(decks)
     res.json(decks)
 
 })
@@ -33,6 +37,13 @@ app.post("/decks", async (req: Request, res: Response) => {
   res.json(createdDeck)
 
 });
+
+app.delete('/decks/:deckId', async (req: Request, res: Response) =>{
+    const deckId = req.params.deckId
+    const deck = await Deck.findByIdAndDelete(deckId)
+    res.json(deck) 
+
+})
 
 
 mongoose.connect(process.env.MONGO_URL!).then(() => {
